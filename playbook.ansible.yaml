@@ -1,0 +1,81 @@
+---
+# Ansible 2.9
+# Run with: ansible-playbook --ask-become-pass playbook.ansible.yaml 
+- hosts: "localhost"
+  become: no
+  vars:
+    - user: "yannik"
+
+  tasks:
+
+    - name: Check if .local/bin is in PATH
+      command: "grep '.local/bin' /home/{{ user }}/.bashrc"
+      register: checkbashrc
+      check_mode: no
+      ignore_errors: yes
+      changed_when: no
+
+    - name: Add to path if not present
+      lineinfile:
+        path: "/home/{{ user }}/.bashrc"
+        line: "export PATH=$PATH:/home/{{ user }}/.local/bin"
+      when: checkbashrc.rc == 1
+
+    - name: "Install system packages"
+      become: yes
+      apt:
+        name:
+          - aptitude
+          - neovim
+          - tree
+          - locate
+          - fd-find
+          # - exa
+        state: latest
+        update_cache: true
+      when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: "Symlink fdfind to fd"
+      file:
+        src: /usr/bin/fdfind
+        path: /usr/bin/fd
+        state: link
+
+    - name: "Check fzf"
+      stat: 
+        path: "/home/{{ user }}/fzf/bin/fzf"        
+      register: fzf_installed
+
+    - name: "Clone fzf"
+      become: no
+      git: 
+          repo: "https://github.com/junegunn/fzf.git"
+          clone: "yes"
+          depth: 1
+          dest: "/home/{{ user }}/fzf"
+          update: "yes"
+      when: not fzf_installed.stat.exists
+
+    - name: "Install fzf"
+      become: no
+      shell: /home/{{ user }}/fzf/install --all
+      when: not fzf_installed.stat.exists
+
+    - name: Check zoxide
+      stat:
+        path: /home/yannik/.local/bin/zoxide
+      register: zoxide_installed
+
+    - block:
+      - name: "Download zoxide"
+        ansible.builtin.get_url:
+          url: https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh
+          dest: /tmp/zoxide-install.sh
+      - name: "Install zoxide"
+        shell: bash /tmp/zoxide-install.sh
+      - name: Register zoxide
+        lineinfile:
+          path: "/home/{{ user }}/.bashrc"
+          backup: yes 
+          line: eval "$(zoxide init bash)"
+      when: not zoxide_installed.stat.exists
