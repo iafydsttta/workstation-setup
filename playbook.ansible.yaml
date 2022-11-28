@@ -1,15 +1,11 @@
 ---
-# Ansible 2.9
-# Run with: ansible-playbook --ask-become-pass playbook.ansible.yaml 
-- hosts: "localhost"
+- hosts: localhost
+  connection: local
   become: no
-  vars:
-    - user: "yannik"
-
   tasks:
 
     - name: Check if .local/bin is in PATH
-      command: "grep '.local/bin' /home/{{ user }}/.bashrc"
+      command: "grep '.local/bin' /home/{{ ansible_user_id }}/.bashrc"
       register: checkbashrc
       check_mode: no
       ignore_errors: yes
@@ -17,8 +13,8 @@
 
     - name: Add to path if not present
       lineinfile:
-        path: "/home/{{ user }}/.bashrc"
-        line: "export PATH=$PATH:/home/{{ user }}/.local/bin"
+        path: "/home/{{ ansible_user_id }}/.bashrc"
+        line: "export PATH=$PATH:/home/{{ ansible_user_id }}/.local/bin"
       when: checkbashrc.rc == 1
 
     - name: "Install system packages"
@@ -30,12 +26,14 @@
           - tree
           - locate
           - fd-find
+          - neofetch
           # - exa
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
 
     - name: "Symlink fdfind to fd"
+      become: yes
       file:
         src: /usr/bin/fdfind
         path: /usr/bin/fd
@@ -43,22 +41,20 @@
 
     - name: "Check fzf"
       stat: 
-        path: "/home/{{ user }}/fzf/bin/fzf"        
+        path: "/home/{{ ansible_user_id }}/fzf/bin/fzf"        
       register: fzf_installed
 
     - name: "Clone fzf"
-      become: no
       git: 
           repo: "https://github.com/junegunn/fzf.git"
           clone: "yes"
           depth: 1
-          dest: "/home/{{ user }}/fzf"
+          dest: "/home/{{ ansible_user_id }}/fzf"
           update: "yes"
       when: not fzf_installed.stat.exists
 
     - name: "Install fzf"
-      become: no
-      shell: /home/{{ user }}/fzf/install --all
+      shell: /home/{{ ansible_user_id }}/fzf/install --all
       when: not fzf_installed.stat.exists
 
     - name: Check zoxide
@@ -75,7 +71,7 @@
         shell: bash /tmp/zoxide-install.sh
       - name: Register zoxide
         lineinfile:
-          path: "/home/{{ user }}/.bashrc"
+          path: "/home/{{ ansible_user_id }}/.bashrc"
           backup: yes 
           line: eval "$(zoxide init bash)"
       when: not zoxide_installed.stat.exists
