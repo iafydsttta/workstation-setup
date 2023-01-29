@@ -27,6 +27,7 @@
           - locate
           - fd-find
           - neofetch
+          - tmux
           # - exa
         state: latest
         update_cache: true
