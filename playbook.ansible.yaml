@@ -21,17 +21,65 @@
       become: yes
       apt:
         name:
-          - aptitude
-          - neovim
-          - tree
-          - locate
-          - fd-find
-          - neofetch
-          - tmux
-          # - exa
+        - aptitude
+        - neovim
+        - tree
+        - locate
+        - fd-find
+        - neofetch
+        - tmux
+        - zsh
+        - apt-transport-https
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: Prepare VSCode dependencies
+      become: true
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+    - name: Add microsoft apt key
+      become: true
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        state: present
+    - name: Add VS Code apt repostitory
+      become: true
+      apt_repository:
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+        state: present
+        filename: vscode
+    - name: Install VS Code
+      become: true
+      apt:
+        name: code
+        state: present
+
+
+    - name: Install Oh-My-Zsh
+      get_url:
+        url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+        dest: /tmp/install.sh
+        mode: 0755
+      become: yes
+      tags: oh-my-zsh
+
+    - name: Check if .oh-my-zsh directory exists
+      stat:
+        path: /home/yannik/.oh-my-zsh
+      register: oh_my_zsh_dir
+
+    - name: Install Oh-My-Zsh
+      shell: "/tmp/install.sh --unattended"
+      tags: oh-my-zsh
+      when: oh_my_zsh_dir.stat.exists == false
 
     - name: "Configure vi-keybindings for tmux"
       lineinfile: 

@@ -1,0 +1,18 @@
+# TODO:
+
+ERROR 
+
+Upon first install:
+
+
+TASK [Check if .local/bin is in PATH] ******************************************
+fatal: [localhost]: FAILED! => {"changed": false, "cmd": ["grep", ".local/bin", "/home/yannik/.bashrc"], "delta": "0:00:00.004933", "end": "2023-01-29 10:44:48.162223", "msg": "non-zero return code", "rc": 1, "start": "2023-01-29 10:44:48.157290", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+...ignoring
+
+
+----
+
+zsh:
+
+Does not yet work with fzf and zoxide
+
