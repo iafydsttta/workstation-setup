@@ -63,6 +63,8 @@
         state: present
 
 
+# ---------------------------------------------------
+
     - name: Install Oh-My-Zsh
       get_url:
         url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
@@ -80,6 +82,26 @@
       shell: "/tmp/install.sh --unattended"
       tags: oh-my-zsh
       when: oh_my_zsh_dir.stat.exists == false
+
+    - name: Clone Pure repo
+      git:
+        repo: https://github.com/sindresorhus/pure.git
+        dest: "{{ ansible_env.HOME }}/.zsh/pure"
+
+    - name: Add Pure to fpath
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: 'fpath+=({{ ansible_env.HOME }}/.zsh/pure)'
+
+    - name: Initialize prompt
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: |
+          autoload -U promptinit; promptinit
+          prompt pure
+        insertafter: EOF
+
+# ---------------------------------------------------
 
     - name: "Configure vi-keybindings for tmux"
       lineinfile: 
@@ -109,6 +131,7 @@
       when: not fzf_installed.stat.exists
 
     - name: "Install fzf"
+      # Note, if not installed in zsh for some reason repeat $HOME/fzf/install --all manually
       shell: /home/{{ ansible_user_id }}/fzf/install --all
       when: not fzf_installed.stat.exists
 
