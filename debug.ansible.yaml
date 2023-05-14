@@ -1,9 +1,0 @@
-- hosts: "localhost"
-  tasks:
-    - name: Show facts available on the system
-      ansible.builtin.debug:
-        var: ansible_facts
-    - name: Get username
-      ansible.builtin.debug:
-        var: ansible_user_id
-
