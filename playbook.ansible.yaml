@@ -152,4 +152,9 @@
           path: "/home/{{ ansible_user_id }}/.bashrc"
           backup: yes 
           line: eval "$(zoxide init bash)"
+      - name: Register zoxide in zsh
+        lineinfile:
+          path: "/home/{{ ansible_user_id }}/.zshrc"
+          backup: yes
+          line: eval "$(zoxide init zsh)"
       when: not zoxide_installed.stat.exists
