@@ -158,3 +158,24 @@
           backup: yes
           line: eval "$(zoxide init zsh)"
       when: not zoxide_installed.stat.exists
+
+# ------------------------------
+
+    # For installing logseq and other AppImage applications
+    - name: Install AppImageLauncher via PPA
+      become: yes
+      apt_repository:
+        repo: "ppa:appimagelauncher-team/stable"
+        state: present
+      notify: Update apt cache
+
+    - name: Update apt cache
+      become: yes
+      apt:
+        update_cache: yes
+
+    - name: Install AppImageLauncher
+      become: yes
+      apt:
+        name: appimagelauncher
+        state: present
