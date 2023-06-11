@@ -12,4 +12,7 @@ Run on a local machine:
 
 ```sh
 ansible-playbook --ask-become-pass -i inventory.ini playbook.ansible.yaml
+
+# Running additional roles (only necessary when overriding default variables)
+ansible-playbook playbook.ansible.yaml --ask-become-pass -i inventory.ini --extra-vars "install_neovim=true"
 ```

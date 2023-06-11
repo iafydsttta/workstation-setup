@@ -10,19 +10,18 @@
       check_mode: no
       ignore_errors: yes
       changed_when: no
-
+    
     - name: Add to path if not present
       lineinfile:
         path: "/home/{{ ansible_user_id }}/.bashrc"
         line: "export PATH=$PATH:/home/{{ ansible_user_id }}/.local/bin"
       when: checkbashrc.rc == 1
-
+    
     - name: "Install system packages"
       become: yes
       apt:
         name:
         - aptitude
-        - neovim
         - tree
         - locate
         - fd-find
@@ -33,7 +32,7 @@
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
-
+    
     - name: Prepare VSCode dependencies
       become: true
       apt:
@@ -61,10 +60,7 @@
       apt:
         name: code
         state: present
-
-
-# ---------------------------------------------------
-
+    
     - name: Install Oh-My-Zsh
       get_url:
         url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
@@ -72,27 +68,27 @@
         mode: 0755
       become: yes
       tags: oh-my-zsh
-
+    
     - name: Check if .oh-my-zsh directory exists
       stat:
         path: /home/yannik/.oh-my-zsh
       register: oh_my_zsh_dir
-
+    
     - name: Install Oh-My-Zsh
       shell: "/tmp/install.sh --unattended"
       tags: oh-my-zsh
       when: oh_my_zsh_dir.stat.exists == false
-
+    
     - name: Clone Pure repo
       git:
         repo: https://github.com/sindresorhus/pure.git
         dest: "{{ ansible_env.HOME }}/.zsh/pure"
-
+    
     - name: Add Pure to fpath
       lineinfile:
         path: "{{ ansible_env.HOME }}/.zshrc"
         line: 'fpath+=({{ ansible_env.HOME }}/.zsh/pure)'
-
+    
     - name: Initialize prompt
       lineinfile:
         path: "{{ ansible_env.HOME }}/.zshrc"
@@ -100,27 +96,25 @@
           autoload -U promptinit; promptinit
           prompt pure
         insertafter: EOF
-
-# ---------------------------------------------------
-
+    
     - name: "Configure vi-keybindings for tmux"
       lineinfile: 
         dest: "/home/{{ ansible_user_id }}/.tmux.conf" 
         line: "set-window-option -g mode-keys vi"
         create: true
-
+    
     - name: "Symlink fdfind to fd"
       become: yes
       file:
         src: /usr/bin/fdfind
         path: /usr/bin/fd
         state: link
-
+    
     - name: "Check fzf"
       stat: 
         path: "/home/{{ ansible_user_id }}/fzf/bin/fzf"        
       register: fzf_installed
-
+    
     - name: "Clone fzf"
       git: 
           repo: "https://github.com/junegunn/fzf.git"
@@ -129,17 +123,17 @@
           dest: "/home/{{ ansible_user_id }}/fzf"
           update: "yes"
       when: not fzf_installed.stat.exists
-
+    
     - name: "Install fzf"
       # Note, if not installed in zsh for some reason repeat $HOME/fzf/install --all manually
       shell: /home/{{ ansible_user_id }}/fzf/install --all
       when: not fzf_installed.stat.exists
-
+    
     - name: Check zoxide
       stat:
         path: /home/yannik/.local/bin/zoxide
       register: zoxide_installed
-
+    
     - block:
       - name: "Download zoxide"
         ansible.builtin.get_url:
@@ -158,9 +152,7 @@
           backup: yes
           line: eval "$(zoxide init zsh)"
       when: not zoxide_installed.stat.exists
-
-# ------------------------------
-
+    
     # For installing logseq and other AppImage applications
     - name: Install AppImageLauncher via PPA
       become: yes
@@ -168,14 +160,21 @@
         repo: "ppa:appimagelauncher-team/stable"
         state: present
       notify: Update apt cache
-
+    
     - name: Update apt cache
       become: yes
       apt:
         update_cache: yes
-
+    
     - name: Install AppImageLauncher
       become: yes
       apt:
         name: appimagelauncher
         state: present
+
+    - name: Include neovim role
+      include_role: 
+        name: neovim
+      when: install_neovim|default(true)
+
+
