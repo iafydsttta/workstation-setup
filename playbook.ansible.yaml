@@ -110,48 +110,6 @@
         path: /usr/bin/fd
         state: link
     
-    - name: "Check fzf"
-      stat: 
-        path: "/home/{{ ansible_user_id }}/fzf/bin/fzf"        
-      register: fzf_installed
-    
-    - name: "Clone fzf"
-      git: 
-          repo: "https://github.com/junegunn/fzf.git"
-          clone: "yes"
-          depth: 1
-          dest: "/home/{{ ansible_user_id }}/fzf"
-          update: "yes"
-      when: not fzf_installed.stat.exists
-    
-    - name: "Install fzf"
-      # Note, if not installed in zsh for some reason repeat $HOME/fzf/install --all manually
-      shell: /home/{{ ansible_user_id }}/fzf/install --all
-      when: not fzf_installed.stat.exists
-    
-    - name: Check zoxide
-      stat:
-        path: /home/yannik/.local/bin/zoxide
-      register: zoxide_installed
-    
-    - block:
-      - name: "Download zoxide"
-        ansible.builtin.get_url:
-          url: https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh
-          dest: /tmp/zoxide-install.sh
-      - name: "Install zoxide"
-        shell: bash /tmp/zoxide-install.sh
-      - name: Register zoxide
-        lineinfile:
-          path: "/home/{{ ansible_user_id }}/.bashrc"
-          backup: yes 
-          line: eval "$(zoxide init bash)"
-      - name: Register zoxide in zsh
-        lineinfile:
-          path: "/home/{{ ansible_user_id }}/.zshrc"
-          backup: yes
-          line: eval "$(zoxide init zsh)"
-      when: not zoxide_installed.stat.exists
     
     # For installing logseq and other AppImage applications
     - name: Install AppImageLauncher via PPA
@@ -171,6 +129,17 @@
       apt:
         name: appimagelauncher
         state: present
+
+    - name: Include fzf role
+      include_role:
+        name: fzf
+      when: install_fzf|default(true)
+
+    - name: Include zoxide role
+      include_role:
+        name: zoxide
+      when: install_zoxide|default(true)
+
 
     - name: Include neovim role
       include_role: 

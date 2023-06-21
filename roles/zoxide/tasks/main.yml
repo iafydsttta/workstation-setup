@@ -1,0 +1,24 @@
+- name: Check zoxide
+  stat:
+    path: /home/yannik/.local/bin/zoxide
+  register: zoxide_installed
+
+- block:
+  - name: "Download zoxide"
+    ansible.builtin.get_url:
+      url: https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh
+      dest: /tmp/zoxide-install.sh
+  - name: "Install zoxide"
+    shell: bash /tmp/zoxide-install.sh
+  - name: Register zoxide
+    lineinfile:
+      path: "/home/{{ ansible_user_id }}/.bashrc"
+      backup: yes 
+      line: eval "$(zoxide init bash)"
+  - name: Register zoxide in zsh
+    lineinfile:
+      path: "/home/{{ ansible_user_id }}/.zshrc"
+      backup: yes
+      line: eval "$(zoxide init zsh)"
+  when: not zoxide_installed.stat.exists
+
