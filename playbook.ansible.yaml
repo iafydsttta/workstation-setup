@@ -147,3 +147,8 @@
       when: install_neovim|default(true)
 
 
+    - name: Include helix role
+      include_role:
+        name: helix
+      when: install_helix|default(true)
+

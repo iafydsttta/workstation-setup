@@ -1,0 +1,25 @@
+- name: Download Helix
+  get_url:
+    url: https://github.com/helix-editor/helix/releases/download/23.05/helix-23.05-x86_64.AppImage
+    dest: "{{ file_path }}"
+  become: yes
+
+- name: Make helix executable
+  file:
+    path: "{{ file_path }}"
+    mode: '0755'
+  become: yes
+
+- name: Add to path a hx
+  file:
+    src: "{{ file_path }}"
+    dest: /usr/local/bin/hx
+    state: link
+  become: yes
+
+- name: Add to path as helix
+  file:
+    src: "{{ file_path }}"
+    dest: /usr/local/bin/helix
+    state: link
+  become: yes
