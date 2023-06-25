@@ -1,0 +1,36 @@
+- name: Install Oh-My-Zsh
+  get_url:
+    url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+    dest: /tmp/install.sh
+    mode: 0755
+  become: yes
+  tags: oh-my-zsh
+
+- name: Check if .oh-my-zsh directory exists
+  stat:
+    path: /home/yannik/.oh-my-zsh
+  register: oh_my_zsh_dir
+
+- name: Install Oh-My-Zsh
+  shell: "/tmp/install.sh --unattended"
+  tags: oh-my-zsh
+  when: oh_my_zsh_dir.stat.exists == false
+
+- name: Clone Pure repo
+  git:
+    repo: https://github.com/sindresorhus/pure.git
+    dest: "{{ ansible_env.HOME }}/.zsh/pure"
+
+- name: Add Pure to fpath
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: 'fpath+=({{ ansible_env.HOME }}/.zsh/pure)'
+
+- name: Initialize prompt
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: |
+      autoload -U promptinit; promptinit
+      prompt pure
+    insertafter: EOF
+
