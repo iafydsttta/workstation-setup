@@ -27,10 +27,9 @@
     line: 'fpath+=({{ ansible_env.HOME }}/.zsh/pure)'
 
 - name: Initialize prompt
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: |
+    block: |
       autoload -U promptinit; promptinit
       prompt pure
-    insertafter: EOF
 
