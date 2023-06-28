@@ -10,7 +10,7 @@
     mode: '0755'
   become: yes
 
-- name: Add to path a hx
+- name: Add to path as hx
   file:
     src: "{{ file_path }}"
     dest: /usr/local/bin/hx
@@ -23,3 +23,14 @@
     dest: /usr/local/bin/helix
     state: link
   become: yes
+
+- name: Make default editor in bash
+  lineinfile:
+    path: "/home/{{ ansible_user_id }}/.bashrc"
+    line: "export EDITOR=helix"
+
+  
+- name: Make default editor in zsh
+  lineinfile:
+    path: "/home/{{ ansible_user_id }}/.zshrc"
+    line: "export EDITOR=helix"
