@@ -1,3 +1,9 @@
+- name: Make default shell
+  user: 
+    user: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  become: yes
+
 - name: Install Oh-My-Zsh
   get_url:
     url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
