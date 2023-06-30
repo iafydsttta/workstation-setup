@@ -16,7 +16,13 @@
         path: "/home/{{ ansible_user_id }}/.bashrc"
         line: "export PATH=$PATH:/home/{{ ansible_user_id }}/.local/bin"
       when: checkbashrc.rc == 1
-    
+
+    - name: .local/bin/ to Path in .zshrc
+      lineinfile:
+        path: "/home/{{ ansible_user_id }}/.zshrc"
+        line: "export PATH=$PATH:/home/{{ ansible_user_id }}/.local/bin"
+        insertbefore: "BOF"
+   
     - name: "Install system packages"
       become: yes
       apt:
