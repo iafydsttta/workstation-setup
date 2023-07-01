@@ -29,7 +29,7 @@
     path: "/home/{{ ansible_user_id }}/.bashrc"
     line: "export EDITOR=helix"
 
-  
+
 - name: Make default editor in zsh
   lineinfile:
     path: "/home/{{ ansible_user_id }}/.zshrc"

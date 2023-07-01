@@ -1,5 +1,5 @@
 - name: Remove neovim if installed
-  apt: 
+  apt:
     name: neovim
     state: absent
   become: yes
@@ -18,4 +18,3 @@
     state: link
     force: yes
   become: yes
-

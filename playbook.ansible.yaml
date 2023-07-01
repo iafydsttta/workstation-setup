@@ -10,7 +10,7 @@
       check_mode: no
       ignore_errors: yes
       changed_when: no
-    
+
     - name: Add to path if not present
       lineinfile:
         path: "/home/{{ ansible_user_id }}/.bashrc"
@@ -22,7 +22,7 @@
         path: "/home/{{ ansible_user_id }}/.zshrc"
         line: "export PATH=$PATH:/home/{{ ansible_user_id }}/.local/bin"
         insertbefore: "BOF"
-   
+
     - name: "Install system packages"
       become: yes
       apt:
@@ -38,7 +38,7 @@
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
-    
+
     - name: Prepare VSCode dependencies
       become: yes
       apt:
@@ -68,23 +68,23 @@
         state: present
 
     - name: Include zsh role
-      include_role: 
+      include_role:
         name: zsh
       when: install_zsh|default(true)
 
     - name: "Configure vi-keybindings for tmux"
-      lineinfile: 
-        dest: "/home/{{ ansible_user_id }}/.tmux.conf" 
+      lineinfile:
+        dest: "/home/{{ ansible_user_id }}/.tmux.conf"
         line: "set-window-option -g mode-keys vi"
         create: true
-    
+
     - name: "Symlink fdfind to fd"
       become: yes
       file:
         src: /usr/bin/fdfind
         path: /usr/bin/fd
         state: link
-    
+
     # For installing logseq and other AppImage applications
     - name: Install AppImageLauncher via PPA
       become: yes
@@ -92,12 +92,12 @@
         repo: "ppa:appimagelauncher-team/stable"
         state: present
       notify: Update apt cache
-    
+
     - name: Update apt cache
       become: yes
       apt:
         update_cache: yes
-    
+
     - name: Install AppImageLauncher
       become: yes
       apt:
@@ -115,7 +115,7 @@
       when: install_zoxide|default(true)
 
     - name: Include neovim role
-      include_role: 
+      include_role:
         name: neovim
       when: install_neovim|default(true)
 

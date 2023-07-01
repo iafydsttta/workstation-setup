@@ -1,5 +1,5 @@
 - name: Make default shell
-  user: 
+  user:
     user: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
   become: yes
@@ -38,4 +38,3 @@
     block: |
       autoload -U promptinit; promptinit
       prompt pure
-

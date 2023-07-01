@@ -1,3 +1,2 @@
 file_name: helix-editor.AppImage
 file_path: /opt/{{ file_name }}
-
