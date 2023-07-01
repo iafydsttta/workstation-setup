@@ -124,3 +124,7 @@
         name: helix
       when: install_helix|default(true)
 
+    - name: Include python role
+      include_role:
+        name: python
+      when: install_python|default(true)

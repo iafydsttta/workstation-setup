@@ -1,0 +1,20 @@
+- name: Install pip
+  apt:
+    name:
+      - python3-pip
+    state: latest
+  become: yes
+
+- name: Check if pipx is installed
+  command: which pipx
+  register: pipx_installed
+  ignore_errors: true
+  changed_when: no
+
+- block:
+  - name: Install pipx
+    shell: "python3 -m pip install --user pipx"
+
+  - name: Pipx ensure path
+    shell: "python3 -m pipx ensurepath"
+  when: pipx_installed.rc != 0
