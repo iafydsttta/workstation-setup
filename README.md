@@ -22,3 +22,6 @@ ansible-playbook playbook.ansible.yaml --ask-become-pass -i inventory.ini --extr
 - This repo uses the [pre-commit](https://pre-commit.com/) framework.
 - The hooks are defined and managed in [.pre-commit-config.yaml](./.pre-commit-config.yaml)
 - Installation via python using pipx: `pipx install pre-commit`
+- Usage:
+  - To run ansible-lint manually: `pre-commit run ansible-lint`
+  - To commit without running hooks: `git commit --no-verify -m ...`
