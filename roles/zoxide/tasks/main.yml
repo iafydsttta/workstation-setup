@@ -15,10 +15,10 @@
 - name: Register zoxide
   lineinfile:
     path: "/home/{{ ansible_user_id }}/.bashrc"
-    backup: yes
+    backup: true
     line: eval "$(zoxide init bash)"
 - name: Register zoxide in zsh
   lineinfile:
     path: "/home/{{ ansible_user_id }}/.zshrc"
-    backup: yes
+    backup: true
     line: eval "$(zoxide init zsh)"

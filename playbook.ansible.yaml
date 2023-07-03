@@ -1,15 +1,15 @@
 ---
 - hosts: localhost
   connection: local
-  become: no
+  become: false
   tasks:
 
     - name: Check if .local/bin is in PATH
       command: "grep '.local/bin' /home/{{ ansible_user_id }}/.bashrc"
       register: checkbashrc
-      check_mode: no
-      ignore_errors: yes
-      changed_when: no
+      check_mode: false
+      ignore_errors: true
+      changed_when: false
 
     - name: Add to path if not present
       lineinfile:
@@ -24,7 +24,7 @@
         insertbefore: "BOF"
 
     - name: "Install system packages"
-      become: yes
+      become: true
       apt:
         name:
         - aptitude
@@ -40,7 +40,7 @@
       when: ansible_facts['distribution'] == "Ubuntu"
 
     - name: Prepare VSCode dependencies
-      become: yes
+      become: true
       apt:
         name:
         - apt-transport-https
@@ -51,18 +51,18 @@
         state: latest
 
     - name: Add microsoft apt key
-      become: yes
+      become: true
       apt_key:
         url: https://packages.microsoft.com/keys/microsoft.asc
         state: present
     - name: Add VS Code apt repostitory
-      become: yes
+      become: true
       apt_repository:
         repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
         state: present
         filename: vscode
     - name: Install VS Code
-      become: yes
+      become: true
       apt:
         name: code
         state: present
@@ -79,7 +79,7 @@
         create: true
 
     - name: "Symlink fdfind to fd"
-      become: yes
+      become: true
       file:
         src: /usr/bin/fdfind
         path: /usr/bin/fd
@@ -87,19 +87,19 @@
 
     # For installing logseq and other AppImage applications
     - name: Install AppImageLauncher via PPA
-      become: yes
+      become: true
       apt_repository:
         repo: "ppa:appimagelauncher-team/stable"
         state: present
       notify: Update apt cache
 
     - name: Update apt cache
-      become: yes
+      become: true
       apt:
-        update_cache: yes
+        update_cache: true
 
     - name: Install AppImageLauncher
-      become: yes
+      become: true
       apt:
         name: appimagelauncher
         state: present

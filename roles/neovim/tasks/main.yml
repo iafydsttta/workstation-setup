@@ -2,19 +2,19 @@
   apt:
     name: neovim
     state: absent
-  become: yes
+  become: true
 
 - name: Download neovim appimage
   get_url:
     url: https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
     dest: /opt/nvim.appimage
     mode: '0755'
-  become: yes
+  become: true
 
 - name: Create symlink for nvim
   file:
     src: /opt/nvim.appimage
     dest: /usr/local/bin/nvim
     state: link
-    force: yes
-  become: yes
+    force: true
+  become: true

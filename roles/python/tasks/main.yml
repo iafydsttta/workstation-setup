@@ -4,13 +4,13 @@
       - python3-pip
       - python3-venv
     state: latest
-  become: yes
+  become: true
 
 - name: Check if pipx is installed
   command: which pipx
   register: pipx_installed
   ignore_errors: true
-  changed_when: no
+  changed_when: false
 
 - block:
   - name: Install pipx

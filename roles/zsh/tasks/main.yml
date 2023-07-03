@@ -2,14 +2,14 @@
   user:
     user: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
-  become: yes
+  become: true
 
 - name: Install Oh-My-Zsh
   get_url:
     url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
     dest: /tmp/install.sh
     mode: 0755
-  become: yes
+  become: true
   tags: oh-my-zsh
 
 - name: Check if .oh-my-zsh directory exists
