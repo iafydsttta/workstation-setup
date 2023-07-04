@@ -12,10 +12,13 @@
   ignore_errors: true
   changed_when: false
 
-- block:
-  - name: Install pipx
-    shell: "python3 -m pip install --user pipx"
-
-  - name: Pipx ensure path
-    shell: "python3 -m pipx ensurepath"
+- name: Install pipx
   when: pipx_installed.rc != 0
+  block:
+  - name: Pip install pipx
+    pip:
+      name: pipx
+      state: present
+      user: true
+  - name: Pipx ensure path
+    shell: python3 -m pipx ensurepath
