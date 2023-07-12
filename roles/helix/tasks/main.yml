@@ -34,3 +34,28 @@
   lineinfile:
     path: "/home/{{ ansible_user_id }}/.zshrc"
     line: "export EDITOR=helix"
+
+- name: Install yaml-language-server globally
+  # TODO: root
+  become: true
+  npm:
+    name: yaml-language-server
+    global: true
+    version: next
+
+- name: Install pyright
+  become: true
+  npm:
+    name: pyright
+    global: true
+
+- name: Create config directory if it does not exist
+  file:
+    path: /home/{{ ansible_user_id }}/.config/helix/
+    state: directory
+
+- name: Copy languages.toml
+  copy:
+    src: config/helix/languages.toml
+    dest: /home/{{ ansible_user_id }}/.config/helix/
+    backup: yes

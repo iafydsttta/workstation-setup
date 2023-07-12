@@ -27,14 +27,15 @@
       become: true
       apt:
         name:
-        - aptitude
-        - tree
-        - locate
-        - fd-find
-        - neofetch
-        - tmux
-        - zsh
         - apt-transport-https
+        - aptitude
+        - fd-find
+        - locate
+        - neofetch
+        - npm
+        - tmux
+        - tree
+        - zsh
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
