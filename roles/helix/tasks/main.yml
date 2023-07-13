@@ -59,3 +59,9 @@
     src: config/helix/languages.toml
     dest: /home/{{ ansible_user_id }}/.config/helix/
     backup: yes
+
+- name: Copy config.toml
+  copy:
+    src: config/helix/config.toml
+    dest: /home/{{ ansible_user_id }}/.config/helix/
+    backup: yes
