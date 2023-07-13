@@ -19,6 +19,6 @@
     pip:
       name: pipx
       state: present
-      user: true
+      extra_args: --user
   - name: Pipx ensure path
     shell: python3 -m pipx ensurepath
