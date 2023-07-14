@@ -73,12 +73,6 @@
         name: zsh
       when: install_zsh|default(true)
 
-    - name: "Configure vi-keybindings for tmux"
-      lineinfile:
-        dest: "/home/{{ ansible_user_id }}/.tmux.conf"
-        line: "set-window-option -g mode-keys vi"
-        create: true
-
     - name: "Symlink fdfind to fd"
       become: true
       file:
@@ -104,6 +98,11 @@
       apt:
         name: appimagelauncher
         state: present
+
+    - name: Include tmux role
+      include_role:
+        name: tmux
+      when: install_tmux|default(true)
 
     - name: Include fzf role
       include_role:
