@@ -2,9 +2,14 @@
 
 ## About
 
-This repo is used for setting up a Ubuntu-based dev environment using ansible. The playbook was tested using ansible 2.9.
+This repo is used for setting up a Ubuntu-based dev environment using Ansible. The playbook was tested using Ansible 2.9.
 
 Consider backing up your dotfiles (like .bashrc) before running the playbook.
+
+## Preparation
+
+- Install ansible and ansible-galaxy
+- Then: `ansible-galaxy install -r requirements.yml`
 
 ## Running the playbook
 
