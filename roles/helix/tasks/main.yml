@@ -7,7 +7,7 @@
 - name: Make helix executable
   file:
     path: "{{ file_path }}"
-    mode: '0755'
+    mode: 'u=rwx,g=rx,o=rx'
   become: true
 
 - name: Add to path as hx
@@ -38,14 +38,14 @@
 - name: Install yaml-language-server globally
   # TODO: root
   become: true
-  npm:
+  community.general.npm:
     name: yaml-language-server
     global: true
     version: next
 
 - name: Install pyright
   become: true
-  npm:
+  community.general.npm:
     name: pyright
     global: true
 
@@ -58,10 +58,12 @@
   copy:
     src: config/helix/languages.toml
     dest: /home/{{ ansible_user_id }}/.config/helix/
-    backup: yes
+    mode: "u=rw,g=rw,o=r"
+    backup: true
 
 - name: Copy config.toml
   copy:
     src: config/helix/config.toml
     dest: /home/{{ ansible_user_id }}/.config/helix/
-    backup: yes
+    mode:  "u=rw,g=rw,o=r"
+    backup: true

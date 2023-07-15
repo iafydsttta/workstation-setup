@@ -8,7 +8,7 @@
   get_url:
     url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
     dest: /tmp/install.sh
-    mode: 0755
+    mode: u=rwx,g=rx,o=rx
   become: true
   tags: oh-my-zsh
 
