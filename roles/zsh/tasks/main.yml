@@ -18,9 +18,10 @@
   register: oh_my_zsh_dir
 
 - name: Install Oh-My-Zsh
-  shell: "/tmp/install.sh --unattended"
+  command: /tmp/install.sh --unattended
   tags: oh-my-zsh
-  when: oh_my_zsh_dir.stat.exists == false
+  when: not oh_my_zsh_dir.stat.exists
+  changed_when: not oh_my_zsh_dir.stat.exists
 
 - name: Clone Pure repo
   git:
