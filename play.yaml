@@ -3,7 +3,6 @@
   connection: local
   become: false
   tasks:
-
     - name: Check if .local/bin is in PATH
       command: "grep '.local/bin' /home/{{ ansible_user_id }}/.bashrc"
       register: checkbashrc
@@ -27,15 +26,15 @@
       become: true
       apt:
         name:
-        - apt-transport-https
-        - aptitude
-        - fd-find
-        - locate
-        - neofetch
-        - npm
-        - tmux
-        - tree
-        - zsh
+          - apt-transport-https
+          - aptitude
+          - fd-find
+          - locate
+          - neofetch
+          - npm
+          - tmux
+          - tree
+          - zsh
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
@@ -44,11 +43,11 @@
       become: true
       apt:
         name:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg
-        - lsb-release
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
         state: latest
 
     - name: Add microsoft apt key

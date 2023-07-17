@@ -5,11 +5,11 @@
 
 - name: "Clone fzf"
   git:
-      repo: "https://github.com/junegunn/fzf.git"
-      clone: true
-      depth: 1
-      dest: "/home/{{ ansible_user_id }}/fzf"
-      update: true
+    repo: "https://github.com/junegunn/fzf.git"
+    clone: true
+    depth: 1
+    dest: "/home/{{ ansible_user_id }}/fzf"
+    update: true
   when: not fzf_installed.stat.exists
 
 - name: "Install fzf"

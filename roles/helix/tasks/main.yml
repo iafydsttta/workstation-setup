@@ -7,7 +7,7 @@
 - name: Make helix executable
   file:
     path: "{{ file_path }}"
-    mode: 'u=rwx,g=rx,o=rx'
+    mode: "u=rwx,g=rx,o=rx"
   become: true
 
 - name: Add to path as hx
@@ -28,7 +28,6 @@
   lineinfile:
     path: "/home/{{ ansible_user_id }}/.bashrc"
     line: "export EDITOR=helix"
-
 
 - name: Make default editor in zsh
   lineinfile:
@@ -65,5 +64,5 @@
   copy:
     src: config/helix/config.toml
     dest: /home/{{ ansible_user_id }}/.config/helix/
-    mode:  "u=rw,g=rw,o=r"
+    mode: "u=rw,g=rw,o=r"
     backup: true

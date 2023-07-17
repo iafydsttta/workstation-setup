@@ -16,10 +16,10 @@
 - name: Install pipx
   when: pipx_installed.rc != 0
   block:
-  - name: Pip install pipx
-    pip:
-      name: pipx
-      state: present
-      extra_args: --user
-  - name: Pipx ensure path
-    shell: python3 -m pipx ensurepath
+    - name: Pip install pipx
+      pip:
+        name: pipx
+        state: present
+        extra_args: --user
+    - name: Pipx ensure path
+      shell: python3 -m pipx ensurepath
