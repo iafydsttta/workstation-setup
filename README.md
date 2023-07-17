@@ -16,10 +16,10 @@ Consider backing up your dotfiles (like .bashrc) before running the playbook.
 Run on a local machine:
 
 ```sh
-ansible-playbook --ask-become-pass -i inventory.ini playbook.ansible.yaml
+ansible-playbook --ask-become-pass -i inventory.ini play.yaml
 
 # Running additional roles (only necessary when overriding default variables)
-ansible-playbook playbook.ansible.yaml --ask-become-pass -i inventory.ini --extra-vars "install_neovim=true"
+ansible-playbook play.yaml --ask-become-pass -i inventory.ini --extra-vars "install_neovim=true"
 ```
 
 ## Pre-commit hooks
