@@ -9,10 +9,11 @@
     clone: true
     depth: 1
     dest: "/home/{{ ansible_user_id }}/fzf"
-    update: true
+    version: 0.42.0
   when: not fzf_installed.stat.exists
 
 - name: "Install fzf"
   # Note, if not installed in zsh for some reason repeat $HOME/fzf/install --all manually
-  shell: /home/{{ ansible_user_id }}/fzf/install --all
+  command: /home/{{ ansible_user_id }}/fzf/install --all
   when: not fzf_installed.stat.exists
+  changed_when: not fzf_installed.stat.exists
