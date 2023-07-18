@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: Workstation Setup
+  hosts: localhost
   connection: local
   become: false
   tasks:
@@ -70,7 +71,7 @@
     - name: Include zsh role
       include_role:
         name: zsh
-      when: install_zsh|default(true)
+      when: install_zsh | default(true)
 
     - name: "Symlink fdfind to fd"
       become: true
@@ -101,29 +102,29 @@
     - name: Include tmux role
       include_role:
         name: tmux
-      when: install_tmux|default(true)
+      when: install_tmux | default(true)
 
     - name: Include fzf role
       include_role:
         name: fzf
-      when: install_fzf|default(true)
+      when: install_fzf | default(true)
 
     - name: Include zoxide role
       include_role:
         name: zoxide
-      when: install_zoxide|default(true)
+      when: install_zoxide | default(true)
 
     - name: Include neovim role
       include_role:
         name: neovim
-      when: install_neovim|default(true)
+      when: install_neovim | default(true)
 
     - name: Include helix role
       include_role:
         name: helix
-      when: install_helix|default(true)
+      when: install_helix | default(true)
 
     - name: Include python role
       include_role:
         name: python
-      when: install_python|default(true)
+      when: install_python | default(true)
