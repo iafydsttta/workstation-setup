@@ -22,4 +22,5 @@
         state: present
         extra_args: --user
     - name: Pipx ensure path
-      shell: python3 -m pipx ensurepath
+      command: python3 -m pipx ensurepath
+      changed_when: false

@@ -4,14 +4,16 @@
   register: zoxide_installed
 
 - name: Install zoxide
+  when: not zoxide_installed.stat.exists
   block:
     - name: Download zoxide
       ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh
         dest: /tmp/zoxide-install.sh
+        mode: "u=rwx,g=rx,o=rx"
     - name: Run installtion script
-      shell: bash /tmp/zoxide-install.sh
-  when: not zoxide_installed.stat.exists
+      command: bash /tmp/zoxide-install.sh
+      changed_when: not zoxide_installed.stat.exists
 
 - name: Register zoxide
   lineinfile:

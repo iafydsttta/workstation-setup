@@ -27,11 +27,12 @@
   git:
     repo: https://github.com/sindresorhus/pure.git
     dest: "{{ ansible_env.HOME }}/.zsh/pure"
+    version: "v1.22.0"
 
 - name: Add Pure to fpath
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'fpath+=({{ ansible_env.HOME }}/.zsh/pure)'
+    line: "fpath+=({{ ansible_env.HOME }}/.zsh/pure)"
 
 - name: Initialize prompt
   blockinfile:

@@ -2,11 +2,6 @@
   get_url:
     url: https://github.com/helix-editor/helix/releases/download/23.05/helix-23.05-x86_64.AppImage
     dest: "{{ file_path }}"
-  become: true
-
-- name: Make helix executable
-  file:
-    path: "{{ file_path }}"
     mode: "u=rwx,g=rx,o=rx"
   become: true
 
@@ -52,6 +47,7 @@
   file:
     path: /home/{{ ansible_user_id }}/.config/helix/
     state: directory
+    mode: "u=rwx,g=rwx,o=rx"
 
 - name: Copy languages.toml
   copy:
