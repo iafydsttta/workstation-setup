@@ -3,6 +3,21 @@
   hosts: localhost
   connection: local
   become: false
+
+  pre_tasks:
+    - name: Check if Password is correct
+      become: true
+      block:
+        - name: Check Password
+          command: echo "PW is correct"
+          changed_when: false
+          register: password_check
+          timeout: 2
+      rescue:
+        - name: Password Alert
+          ansible.builtin.fail:
+            msg: Password timeout. Correct password?
+
   tasks:
     - name: Check if .local/bin is in PATH
       command: "grep '.local/bin' /home/{{ ansible_user_id }}/.bashrc"
