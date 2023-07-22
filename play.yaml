@@ -143,3 +143,8 @@
       include_role:
         name: python
       when: install_python | default(true)
+
+    - name: Include cli_tools role
+      include_role:
+        name: cli_tools
+      when: install_cli_tools | default(true)

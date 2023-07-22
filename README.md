@@ -9,6 +9,7 @@ Consider backing up your dotfiles (like .bashrc) before running the playbook.
 ## Preparation
 
 - Install ansible and ansible-galaxy
+- Install community collection: `ansible-galaxy collection install community.general`
 - Then: `ansible-galaxy install -r requirements.yml`
 
 ## Running the playbook
