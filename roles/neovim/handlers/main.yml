@@ -1,0 +1,4 @@
+- name: PostInstallationHandler
+  # https://github.com/nvim-lua/kickstart.nvim#post-installation
+  command: nvim --headless "+Lazy! sync" +qa
+  changed_when: true

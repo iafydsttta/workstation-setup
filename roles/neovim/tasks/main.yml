@@ -8,7 +8,7 @@
   get_url:
     url: https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
     dest: /opt/nvim.appimage
-    mode: 'u=rwx,g=rx,o=rx'
+    mode: "u=rwx,g=rx,o=rx"
   become: true
 
 - name: Create symlink for nvim
@@ -18,3 +18,11 @@
     state: link
     force: true
   become: true
+
+- name: Clone kickstart.nvim repository
+  git:
+    repo: https://github.com/nvim-lua/kickstart.nvim.git
+    dest: "/home/{{ansible_user_id}}/.config/nvim"
+    # 13 Sep 2023
+    version: 4b31f8ef9e37f8a02739659a0a505927114c77af
+  notify: PostInstallationHandler
