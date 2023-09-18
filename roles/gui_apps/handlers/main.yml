@@ -1,0 +1,6 @@
+- name: RunAnkiInstaller
+  command: "./install.sh"
+  become: true
+  args:
+    chdir: "{{ ansible_user_dir }}/Downloads/anki-2.1.66-linux-qt6"
+  changed_when: true

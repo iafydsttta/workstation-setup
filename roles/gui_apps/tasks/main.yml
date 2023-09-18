@@ -1,0 +1,22 @@
+- name: Anki dependencies
+  # https://docs.ankiweb.net/platform/linux/installing.html
+  apt:
+    name:
+      - libxcb-xinerama0
+      - libxcb-cursor0
+    state: latest
+  become: true
+
+- name: Download Anki
+  get_url:
+    url: https://github.com/ankitects/anki/releases/download/2.1.66/anki-2.1.66-linux-qt6.tar.zst
+    dest: "/home/{{ansible_user_id}}/Downloads/"
+    mode: "u=rwx,g=rx,o=rx"
+  become: false
+
+- name: Extract Anki archive
+  ansible.builtin.unarchive:
+    src: "{{ansible_user_dir}}/Downloads/anki-2.1.66-linux-qt6.tar.zst"
+    dest: "{{ ansible_user_dir }}/Downloads/"
+    remote_src: true
+  notify: RunAnkiInstaller
