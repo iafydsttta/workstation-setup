@@ -52,6 +52,8 @@
           - tmux
           - tree
           - zsh
+          - sqlite3
+          - rename
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
