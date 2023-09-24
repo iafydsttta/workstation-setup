@@ -86,6 +86,25 @@
         name: code
         state: present
 
+    - name: Ensure aliases are in ~/.gitconfig
+      community.general.ini_file:
+        path: "{{ ansible_env.HOME }}/.gitconfig"
+        section: alias
+        option: "{{ item.key }}"
+        value: "{{ item.value }}"
+        mode: "u=rw,g=rw,o=r"
+        state: present
+      loop:
+        - { key: "st", value: "status" }
+        - { key: "ss", value: "status -s" }
+        - { key: "cm", value: "commit" }
+        - { key: "co", value: "checkout" }
+        - { key: "br", value: "branch" }
+        - { key: "last", value: "log -1 HEAD" }
+        - { key: "lol", value: "log --oneline" }
+        - { key: "hh", value: "diff HEAD^ HEAD" }
+        - { key: "ds", value: "diff --staged" }
+
     - name: Include zsh role
       include_role:
         name: zsh
