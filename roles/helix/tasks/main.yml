@@ -21,12 +21,12 @@
 
 - name: Make default editor in bash
   lineinfile:
-    path: "/home/{{ ansible_user_id }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/.bashrc"
     line: "export EDITOR=helix"
 
 - name: Make default editor in zsh
   lineinfile:
-    path: "/home/{{ ansible_user_id }}/.zshrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: "export EDITOR=helix"
 
 - name: Install yaml-language-server globally
@@ -45,20 +45,20 @@
 
 - name: Create config directory if it does not exist
   file:
-    path: /home/{{ ansible_user_id }}/.config/helix/
+    path: "{{ ansible_env.HOME }}/.config/helix/"
     state: directory
     mode: "u=rwx,g=rwx,o=rx"
 
 - name: Copy languages.toml
   copy:
     src: config/helix/languages.toml
-    dest: /home/{{ ansible_user_id }}/.config/helix/
+    dest: "{{ ansible_env.HOME }}/.config/helix/"
     mode: "u=rw,g=rw,o=r"
     backup: true
 
 - name: Copy config.toml
   copy:
     src: config/helix/config.toml
-    dest: /home/{{ ansible_user_id }}/.config/helix/
+    dest: "{{ ansible_env.HOME }}/.config/helix/"
     mode: "u=rw,g=rw,o=r"
     backup: true

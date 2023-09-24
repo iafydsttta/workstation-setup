@@ -20,7 +20,7 @@
 
   tasks:
     - name: Check if .local/bin is in PATH
-      command: "grep '.local/bin' /home/{{ ansible_user_id }}/.bashrc"
+      command: "grep '.local/bin' {{ ansible_env.HOME }}/.bashrc"
       register: checkbashrc
       check_mode: false
       ignore_errors: true
@@ -28,14 +28,14 @@
 
     - name: Add to path if not present
       lineinfile:
-        path: "/home/{{ ansible_user_id }}/.bashrc"
-        line: "export PATH=$PATH:/home/{{ ansible_user_id }}/.local/bin"
+        path: "{{ ansible_env.HOME }}/.bashrc"
+        line: "export PATH=$PATH:{{ ansible_env.HOME }}/.local/bin"
       when: checkbashrc.rc == 1
 
     - name: .local/bin/ to Path in .zshrc
       lineinfile:
-        path: "/home/{{ ansible_user_id }}/.zshrc"
-        line: "export PATH=$PATH:/home/{{ ansible_user_id }}/.local/bin"
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: "export PATH=$PATH:{{ ansible_env.HOME }}/.local/bin"
         insertbefore: "BOF"
 
     - name: "Install system packages"

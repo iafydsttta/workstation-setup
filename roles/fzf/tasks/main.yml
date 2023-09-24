@@ -1,6 +1,6 @@
 - name: "Check fzf"
   stat:
-    path: "/home/{{ ansible_user_id }}/fzf/bin/fzf"
+    path: "{{ ansible_env.HOME }}/fzf/bin/fzf"
   register: fzf_installed
 
 - name: "Clone fzf"
@@ -8,12 +8,12 @@
     repo: "https://github.com/junegunn/fzf.git"
     clone: true
     depth: 1
-    dest: "/home/{{ ansible_user_id }}/fzf"
+    dest: "{{ ansible_env.HOME }}/fzf"
     version: 0.42.0
   when: not fzf_installed.stat.exists
 
 - name: "Install fzf"
   # Note, if not installed in zsh for some reason repeat $HOME/fzf/install --all manually
-  command: /home/{{ ansible_user_id }}/fzf/install --all
+  command: "{{ ansible_env.HOME }}/fzf/install --all"
   when: not fzf_installed.stat.exists
   changed_when: not fzf_installed.stat.exists

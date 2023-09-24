@@ -14,7 +14,7 @@
 
 - name: Check if .oh-my-zsh directory exists
   stat:
-    path: /home/yannik/.oh-my-zsh
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
   register: oh_my_zsh_dir
 
 - name: Install Oh-My-Zsh

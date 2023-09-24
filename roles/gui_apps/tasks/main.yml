@@ -10,7 +10,7 @@
 - name: Download Anki
   get_url:
     url: https://github.com/ankitects/anki/releases/download/2.1.66/anki-2.1.66-linux-qt6.tar.zst
-    dest: "/home/{{ansible_user_id}}/Downloads/"
+    dest: "{{ ansible_env.HOME }}/Downloads/"
     mode: "u=rwx,g=rx,o=rx"
   become: false
 
