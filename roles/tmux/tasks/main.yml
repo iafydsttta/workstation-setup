@@ -1,9 +1,16 @@
-- name: "Configure vi-keybindings for tmux"
-  lineinfile:
-    dest: "{{ ansible_env.HOME }}/.tmux.conf"
-    line: "set-window-option -g mode-keys vi"
-    create: true
-    mode: "u=rw,g=rw,o=r"
+- name: Tmux plugin manager
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+    version: 7bdb7ca33c9cc6440a600202b50142f401b6fe21
+  notify: PostCloneHandler
+
+# - name: "Configure vi-keybindings for tmux"
+#   lineinfile:
+#     dest: "{{ ansible_env.HOME }}/.tmux.conf"
+#     line: "set-window-option -g mode-keys vi"
+#     create: true
+#     mode: "u=rw,g=rw,o=r"
 
 # https://github.com/helix-editor/helix/wiki/Troubleshooting#when-using-tmux-or-screen-there-is-a-delay-after-hitting-escape-before-its-registered
 - name: "Fix helix slow return to normal mode"

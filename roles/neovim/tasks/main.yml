@@ -6,7 +6,8 @@
 
 - name: Download neovim appimage
   get_url:
-    url: https://github.com/neovim/neovim/releases/download/stable/nvim.appimage
+    # 13 Sep 2023
+    url: https://github.com/neovim/neovim/releases/download/v0.9.2/nvim.appimage
     dest: /opt/nvim.appimage
     mode: "u=rwx,g=rx,o=rx"
   become: true
@@ -19,10 +20,16 @@
     force: true
   become: true
 
+- name: Check nvim config
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/nvim"
+  register: nvim_cfg_dir
+
 - name: Clone kickstart.nvim repository
   git:
     repo: https://github.com/nvim-lua/kickstart.nvim.git
     dest: "{{ ansible_env.HOME }}/.config/nvim"
     # 13 Sep 2023
     version: 4b31f8ef9e37f8a02739659a0a505927114c77af
+  when: ! nvim_cfg_dir.stat.exists
   notify: PostInstallationHandler
