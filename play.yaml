@@ -2,6 +2,7 @@
 - name: Workstation Setup
   hosts: localhost
   connection: local
+  force_handlers: true
   become: false
 
   pre_tasks:
@@ -54,6 +55,7 @@
           - zsh
           - sqlite3
           - rename
+          - ripgrep # required for grep functionality in nvim telescope
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
@@ -139,39 +141,39 @@
     - name: Include tmux role
       include_role:
         name: tmux
-      when: install_tmux | default(true)
+      when: install_tmux | default(true) | bool
 
     - name: Include fzf role
       include_role:
         name: fzf
-      when: install_fzf | default(true)
+      when: install_fzf | default(true) | bool
 
     - name: Include zoxide role
       include_role:
         name: zoxide
-      when: install_zoxide | default(true)
+      when: install_zoxide | default(true) | bool
 
     - name: Include neovim role
       include_role:
         name: neovim
-      when: install_neovim | default(true)
+      when: install_neovim | default(true) | bool
 
     - name: Include helix role
       include_role:
         name: helix
-      when: install_helix | default(true)
+      when: install_helix | default(true) | bool
 
     - name: Include python role
       include_role:
         name: python
-      when: install_python | default(true)
+      when: install_python | default(true) | bool
 
     - name: Include cli_tools role
       include_role:
         name: cli_tools
-      when: install_cli_tools | default(true)
+      when: install_cli_tools | default(true) | bool
 
     - name: Include gui_apps role
       include_role:
         name: gui_apps
-      when: install_gui_apps | default(true)
+      when: install_gui_apps | default(false) | bool
