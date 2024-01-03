@@ -57,7 +57,7 @@
           - sqlite3
           - rename
           - ripgrep # required for grep functionality in nvim telescope
-          - unizp
+          - unzip
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
