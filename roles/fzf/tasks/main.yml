@@ -17,3 +17,12 @@
   command: "{{ ansible_env.HOME }}/fzf/install --all"
   when: not fzf_installed.stat.exists
   changed_when: not fzf_installed.stat.exists
+
+- name: Set fzf options in shell bashrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: export FZF_DEFAULT_OPTS='--multi --no-height --extended'
+- name: Set fzf options in zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: export FZF_DEFAULT_OPTS='--multi --no-height --extended'
