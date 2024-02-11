@@ -179,3 +179,8 @@
       include_role:
         name: gui_apps
       when: install_gui_apps | default(false) | bool
+
+    - name: Include lnav role
+      include_role:
+        name: lnav
+      when: install_lnav | default(true) | bool
