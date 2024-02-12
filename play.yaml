@@ -20,6 +20,15 @@
             msg: Password timeout. Correct password?
 
   tasks:
+    - name: Init config files
+      file:
+        state: touch
+        path: "{{ ansible_env.HOME }}/{{item}}"
+        mode: "u=rw,g=rw,o=r"
+      with_items:
+        - ".bashrc"
+        - ".zshrc"
+
     - name: Check if .local/bin is in PATH
       command: "grep '.local/bin' {{ ansible_env.HOME }}/.bashrc"
       register: checkbashrc
@@ -46,18 +55,20 @@
           - apt-transport-https
           - aptitude
           - fd-find
+          - git
           - locate
+          - magic-wormhole
           - neofetch
           - npm
-          - magic-wormhole
-          - shutter
-          - tmux
-          - tree
-          - zsh
-          - sqlite3
           - rename
           - ripgrep # required for grep functionality in nvim telescope
+          - shutter
+          - sqlite3
+          - tmux
+          - tmux
+          - tree
           - unzip
+          - zsh
         state: latest
         update_cache: true
       when: ansible_facts['distribution'] == "Ubuntu"
@@ -122,6 +133,7 @@
         state: link
 
     # For installing logseq and other AppImage applications
+    # TODO: does not work on Debian -> and nvim/helix depend on this step
     - name: Install AppImageLauncher via PPA
       become: true
       apt_repository:

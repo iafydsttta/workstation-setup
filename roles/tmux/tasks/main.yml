@@ -1,3 +1,9 @@
+- name: Init config file
+  file:
+    state: touch
+    path: "{{ ansible_env.HOME }}/.tmux.conf"
+    mode: "u=rw,g=rw,o=r"
+
 - name: Tmux plugin manager
   git:
     repo: https://github.com/tmux-plugins/tpm
