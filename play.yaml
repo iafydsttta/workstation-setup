@@ -20,6 +20,7 @@
             msg: Password timeout. Correct password?
 
   tasks:
+
     - name: Init config files
       file:
         state: touch
@@ -196,3 +197,8 @@
       include_role:
         name: lnav
       when: install_lnav | default(true) | bool
+
+    - name: Include difftastic role
+      include_role:
+        name: difftastic
+      when: install_difftastic | default(true) | bool
