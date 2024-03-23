@@ -3,36 +3,35 @@
     path: /opt/lnav
   register: lnav_exists
 
-- name: Download lnav if not exists
-  get_url:
-    # 11 feb 2024
-    url: https://github.com/tstack/lnav/releases/download/v0.11.2/lnav-0.11.2-x86_64-linux-musl.zip
-    dest: /tmp/lnav-0.11.2-x86_64-linux-musl.zip
-    mode: "u=rw,g=r,o=r"
+- name: Install lnav
   when: not lnav_exists.stat.exists
+  block:
+    - name: Download
+      get_url:
+        # 11 feb 2024
+        url: https://github.com/tstack/lnav/releases/download/v0.11.2/lnav-0.11.2-x86_64-linux-musl.zip
+        dest: /tmp/lnav-0.11.2-x86_64-linux-musl.zip
+        mode: "u=rw,g=r,o=r"
 
-- name: Unzip lnav
-  unarchive:
-    src: /tmp/lnav-0.11.2-x86_64-linux-musl.zip
-    dest: /tmp/
-    mode: "u=rwx,g=rx,o=rx"
-    remote_src: true
-  when: not lnav_exists.stat.exists
+    - name: Unzip
+      unarchive:
+        src: /tmp/lnav-0.11.2-x86_64-linux-musl.zip
+        dest: /tmp/
+        mode: "u=rwx,g=rx,o=rx"
+        remote_src: true
 
-- name: Copy to opt
-  become: true
-  copy:
-    src: /tmp/lnav-0.11.2/lnav
-    dest: /opt/
-    mode: "u=rwx,g=rx,o=rx"
-    remote_src: true
-  when: not lnav_exists.stat.exists
+    - name: Copy to opt
+      become: true
+      copy:
+        src: /tmp/lnav-0.11.2/lnav
+        dest: /opt/
+        mode: "u=rwx,g=rx,o=rx"
+        remote_src: true
 
-- name: Create symlink for nvim
-  become: true
-  file:
-    src: /opt/lnav
-    dest: /usr/local/bin/lnav
-    state: link
-    force: true
-  when: not lnav_exists.stat.exists
+    - name: Create symlink
+      become: true
+      file:
+        src: /opt/lnav
+        dest: /usr/local/bin/lnav
+        state: link
+        force: true

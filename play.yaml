@@ -20,11 +20,10 @@
             msg: Password timeout. Correct password?
 
   tasks:
-
     - name: Init config files
       file:
         state: touch
-        path: "{{ ansible_env.HOME }}/{{item}}"
+        path: "{{ ansible_env.HOME }}/{{ item }}"
         mode: "u=rw,g=rw,o=r"
       with_items:
         - ".bashrc"
