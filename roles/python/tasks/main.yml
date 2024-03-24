@@ -24,3 +24,7 @@
     - name: Pipx ensure path
       command: python3 -m pipx ensurepath
       changed_when: false
+
+- name: Install frogmouth
+  community.general.pipx:
+    name: frogmouth

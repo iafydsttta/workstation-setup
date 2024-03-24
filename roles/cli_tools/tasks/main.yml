@@ -1,3 +1,0 @@
-- name: Install frogmouth
-  community.general.pipx:
-    name: frogmouth

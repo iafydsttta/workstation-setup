@@ -182,11 +182,6 @@
         name: python
       when: install_python | default(true) | bool
 
-    - name: Include cli_tools role
-      include_role:
-        name: cli_tools
-      when: install_cli_tools | default(true) | bool
-
     - name: Include gui_apps role
       include_role:
         name: gui_apps
@@ -201,3 +196,8 @@
       include_role:
         name: difftastic
       when: install_difftastic | default(true) | bool
+
+    - name: Include binaries role
+      include_role:
+        name: binaries
+      when: install_binaries | default(true) | bool

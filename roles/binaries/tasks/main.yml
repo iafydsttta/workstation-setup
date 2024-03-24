@@ -1,0 +1,35 @@
+- name: Check if executable exists in /opt/
+  stat:
+    path: /opt/duckdb
+  register: duckdb_installed
+
+- name: Install
+  when: not duckdb_installed.stat.exists
+  block:
+    - name: Download
+      get_url:
+        # march 2024
+        url: https://github.com/duckdb/duckdb/releases/download/v0.10.1/duckdb_cli-linux-amd64.zip
+        dest: /tmp/
+        mode: "u=rwx,g=rx,o=rx"
+    - name: Extract archive
+      ansible.builtin.unarchive:
+        src: "/tmp/duckdb_cli-linux-amd64.zip"
+        dest: "/tmp/"
+    - name: Move to opt
+      become: true
+      copy:
+        src: /tmp/duckdb
+        dest: /opt/
+        mode: "u=rwx,g=rx,o=rx"
+    - name: Remove original
+      file:
+        path: /tmp/duckdb
+        state: absent
+    - name: Create symlink
+      become: true
+      file:
+        src: /opt/duckdb
+        dest: /usr/local/bin/duckdb
+        state: link
+        force: true
