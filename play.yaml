@@ -201,3 +201,8 @@
       include_role:
         name: binaries
       when: install_binaries | default(true) | bool
+
+    - name: Include rust role
+      include_role:
+        name: rust
+      when: install_rust | default(true) | bool
