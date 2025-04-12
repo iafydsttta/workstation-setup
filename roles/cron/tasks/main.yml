@@ -1,0 +1,10 @@
+---
+- name: Folder Cleanup Job
+  ansible.builtin.cron:
+      name: "{{ item }} Cleanup Job"
+      special_time: reboot
+      job: "find {{ ansible_env.HOME }}/{{ item }} -mindepth 1 -maxdepth 1 -exec rm -rf {} +"
+      state: present
+  loop:
+      - Desktop
+      - Downloads

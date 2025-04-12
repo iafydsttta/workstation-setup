@@ -28,3 +28,50 @@
 - name: Install frogmouth
   community.general.pipx:
     name: frogmouth
+
+- name: Check if uv is installed
+  command: which uv
+  register: uv_installed
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+
+- name: Install UV
+  when: uv_installed.rc != 0
+  block:
+    - name: Create temporary directory for UV installer
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: uv-installer
+      register: uv_temp_dir
+
+    - name: Download UV installer script
+      ansible.builtin.get_url:
+        url: https://astral.sh/uv/0.6.14/install.sh
+        dest: "{{ uv_temp_dir.path }}/install.sh"
+        mode: "0755"
+        validate_certs: true
+
+    - name: Verify script integrity
+      ansible.builtin.stat:
+        path: "{{ uv_temp_dir.path }}/install.sh"
+      register: script_stat
+
+    - name: Execute UV installer script
+      ansible.builtin.shell: "{{ uv_temp_dir.path }}/install.sh"
+      args:
+        executable: /bin/bash
+      register: install_result
+      changed_when: install_result.rc == 0
+      failed_when: install_result.rc != 0
+
+    - name: Display installation result
+      ansible.builtin.debug:
+        var: install_result.stdout_lines
+
+  always:
+    - name: Clean up temporary directory
+      ansible.builtin.file:
+        path: "{{ uv_temp_dir.path }}"
+        state: absent
+      when: uv_temp_dir.path is defined

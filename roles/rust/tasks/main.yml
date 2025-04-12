@@ -24,7 +24,21 @@
         executable: /bin/bash
       changed_when: false
 
+- name: Run rustup if already installed
+  when: cargo_installed.rc == 0
+  become: false
+  ansible.builtin.command: rustup update
+  args:
+    warn: false
+  register: rustup_result
+  changed_when: "'unchanged' not in rustup_result.stdout"
+
 - name: Install zellij
   community.general.cargo:
     name: zellij
-    # locked: true
+
+- name: Install Yazi
+  community.general.cargo:
+    name:
+      - yazi-fm
+      - yazi-cli

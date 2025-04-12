@@ -206,3 +206,8 @@
       include_role:
         name: rust
       when: install_rust | default(true) | bool
+
+    - name: Include cron role
+      include_role:
+        name: cron
+      when: install_cron | default(true) | bool
