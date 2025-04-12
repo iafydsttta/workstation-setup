@@ -69,6 +69,18 @@
       ansible.builtin.debug:
         var: install_result.stdout_lines
 
+    - name: Ensure uv and uvx shell completion lines in .zshrc
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: 'eval "$(uv generate-shell-completion zsh)"'
+        state: present
+
+    - name: Ensure uvx shell completion lines in .zshrc
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        line: 'eval "$(uvx --generate-shell-completion zsh)"'
+        state: present
+
   always:
     - name: Clean up temporary directory
       ansible.builtin.file:
